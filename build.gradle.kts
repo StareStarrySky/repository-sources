@@ -5,11 +5,12 @@ buildscript {
         mavenLocal()
         maven("https://plugins.gradle.org/m2/")
         mavenCentral()
+        jcenter()
     }
 
     val kotlinVer = "1.4.32"
     val dokkaVer = "1.4.30"
-    val siteVer = "1.0.1"
+    val siteVer = "1.0.2"
 
     val springDepVer = "1.0.11.RELEASE"
 
@@ -26,7 +27,7 @@ buildscript {
 
 val revision = "1.0.0"
 val javaVer = "15"
-val gradleVer = "7.0.0"
+val gradleVer = "7.0"
 
 val springBootDepVer = "2.4.5"
 val springCloudDepVer = "Hoxton.SR10"
@@ -37,11 +38,10 @@ allprojects {
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
-    apply(plugin = "io.spring.dependency-management")
-
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
     }
 
     dependencies {

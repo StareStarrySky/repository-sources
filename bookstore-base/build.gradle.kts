@@ -4,7 +4,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
     kotlin("jvm")
-    id("maven-publish")
+    `maven-publish`
     id("org.jetbrains.dokka")
     id("com.github.starestarrysky.site-gradle-plugin")
 }
@@ -24,7 +24,7 @@ val generateSourcesJar by tasks.creating(Jar::class) {
 }
 
 tasks.named<DokkaTask>("dokkaJavadoc") {
-    outputDirectory.set(file("$buildDir${File.separator}javadoc"))
+    outputDirectory.set(file("$buildDir/javadoc"))
 }
 
 val generateJavadoc by tasks.creating(Jar::class) {
@@ -33,22 +33,6 @@ val generateJavadoc by tasks.creating(Jar::class) {
     archiveClassifier.set("javadoc")
     from(tasks["dokkaJavadoc"].property("outputDirectory"))
 }
-
-configure<GitHubExtension> {
-    credentials {
-        oauthToken = ""
-    }
-}
-
-val site by tasks.creating(SiteTask::class) {
-    repositoryName.set("repository-test")
-    repositoryOwner.set("StareStarrySky")
-    branch.set("refs/heads/main")
-    message.set("Repository-test for ${rootProject.version}.")
-    outputDirectory.set(file("${project.buildDir}/deploy"))
-    includes.add("**/*")
-}
-
 
 tasks {
     publishing {
@@ -67,4 +51,20 @@ tasks {
             }
         }
     }
+}
+
+configure<GitHubExtension> {
+    credentials {
+        oauthToken = ""
+    }
+}
+
+val site by tasks.creating(SiteTask::class) {
+    dependsOn("publishMavenPublicationToProjectDeployRepository")
+    repositoryName.set("repository")
+    repositoryOwner.set("StareStarrySky")
+    branch.set("refs/heads/master")
+    message.set("Repository for ${rootProject.version}.")
+    outputDirectory.set(file("$buildDir/deploy"))
+    includes.add("**/*")
 }
