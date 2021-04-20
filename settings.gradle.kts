@@ -8,3 +8,4 @@
  */
 
 rootProject.name = "repository-sources"
+include("bookstore-base")

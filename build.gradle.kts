@@ -7,20 +7,37 @@ buildscript {
         mavenCentral()
     }
 
-    val kotlinVersion = "1.4.32"
+    val kotlinVer = "1.4.32"
+    val dokkaVer = "1.4.30"
+    val siteVer = "1.0.1"
+
+    val springDepVer = "1.0.11.RELEASE"
 
     dependencies {
-        classpath(kotlin("allopen", kotlinVersion))
-        classpath(kotlin("noarg", kotlinVersion))
-        classpath(kotlin("gradle-plugin", kotlinVersion))
+        classpath(kotlin("allopen", kotlinVer))
+        classpath(kotlin("noarg", kotlinVer))
+        classpath(kotlin("gradle-plugin", kotlinVer))
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVer}")
+        classpath("com.github.starestarrysky:site-gradle-plugin:${siteVer}")
+
+        classpath("io.spring.gradle:dependency-management-plugin:${springDepVer}")
     }
 }
 
+val revision = "1.0.0"
+val javaVer = "15"
+val gradleVer = "7.0.0"
+
+val springBootDepVer = "2.4.5"
+val springCloudDepVer = "Hoxton.SR10"
+
 allprojects {
-    group = "xyz.starestarrysky.repository"
-    version = "1.0.0"
+    group = "xyz.starestarrysky.library"
+    version = revision
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    apply(plugin = "io.spring.dependency-management")
 
     repositories {
         mavenLocal()
@@ -31,10 +48,13 @@ allprojects {
         val implementation by configurations
         val testImplementation by configurations
 
-        implementation((kotlin("reflect")))
-        implementation((kotlin("stdlib")))
-        testImplementation((kotlin("test")))
-        testImplementation((kotlin("test-junit")))
+        implementation(kotlin("reflect"))
+        implementation(kotlin("stdlib"))
+        testImplementation(kotlin("test"))
+        testImplementation(kotlin("test-junit"))
+
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootDepVer}"))
+        implementation(platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudDepVer}"))
     }
 
     configure<SourceSetContainer> {
@@ -49,12 +69,12 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "15"
+            jvmTarget = javaVer
         }
     }
 }
 
 tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "7.0.0"
+    gradleVersion = gradleVer
     distributionType = Wrapper.DistributionType.BIN
 }
