@@ -10,12 +10,11 @@ plugins {
 }
 
 base {
-    archivesBaseName = "bookstore-base"
+    archivesBaseName = "bookstore-annotation"
 }
 
 dependencies {
-    api("org.springframework:spring-beans")
-    api("org.springframework:spring-context")
+    implementation(project(":bookstore-base"))
 }
 
 val generateSourcesJar by tasks.creating(Jar::class) {
