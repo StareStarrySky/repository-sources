@@ -8,5 +8,4 @@
  */
 
 rootProject.name = "repository-sources"
-include("bookstore-annotation")
 include("bookstore-base")

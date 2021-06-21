@@ -1,4 +1,4 @@
-package xyz.starestarrysky.library.annotation
+package xyz.starestarrysky.library.base.annotation
 
 import org.springframework.beans.factory.annotation.Qualifier
 
