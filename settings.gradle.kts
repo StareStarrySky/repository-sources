@@ -9,3 +9,4 @@
 
 rootProject.name = "repository-sources"
 include("bookstore-base")
+include("bookstore-util")

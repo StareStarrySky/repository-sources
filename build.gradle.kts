@@ -32,6 +32,8 @@ val gradleVer = "7.0"
 val springBootDepVer = "2.4.5"
 val springCloudDepVer = "Hoxton.SR10"
 
+ext["commonsIoVer"] = "2.10.0"
+
 allprojects {
     group = "xyz.starestarrysky.library"
     version = revision
