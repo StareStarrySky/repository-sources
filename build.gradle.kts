@@ -5,23 +5,18 @@ buildscript {
         mavenLocal()
         maven("https://plugins.gradle.org/m2/")
         mavenCentral()
-        jcenter()
     }
 
     val kotlinVer = "1.4.32"
-    val dokkaVer = "1.4.30"
-    val siteVer = "1.0.2"
-
-    val springDepVer = "1.0.11.RELEASE"
 
     dependencies {
         classpath(kotlin("allopen", kotlinVer))
         classpath(kotlin("noarg", kotlinVer))
         classpath(kotlin("gradle-plugin", kotlinVer))
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVer}")
-        classpath("com.github.starestarrysky:site-gradle-plugin:${siteVer}")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
+        classpath("com.github.starestarrysky:site-gradle-plugin:1.0.2")
 
-        classpath("io.spring.gradle:dependency-management-plugin:${springDepVer}")
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE")
     }
 }
 
@@ -33,6 +28,7 @@ val springBootDepVer = "2.4.5"
 val springCloudDepVer = "Hoxton.SR10"
 
 ext["commonsIoVer"] = "2.10.0"
+ext["kotlinVer"] = "1.4.32"
 
 allprojects {
     group = "xyz.starestarrysky.library"
@@ -43,7 +39,6 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
     }
 
     dependencies {

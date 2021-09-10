@@ -11,5 +11,6 @@ rootProject.name = "repository-sources"
 include(
     "bookstore-base",
     "bookstore-jpa",
+    "bookstore-kotlin",
     "bookstore-util"
 )
