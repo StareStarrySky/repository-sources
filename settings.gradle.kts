@@ -10,6 +10,7 @@
 rootProject.name = "repository-sources"
 include(
     "bookstore-base",
+    "bookstore-deploy",
     "bookstore-jpa",
     "bookstore-kotlin",
     "bookstore-util"
