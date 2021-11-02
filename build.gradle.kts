@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
 
-    val kotlinVer = "1.4.32"
+    val kotlinVer = "1.5.31"
 
     dependencies {
         classpath(kotlin("allopen", kotlinVer))
@@ -28,7 +28,7 @@ val springBootDepVer = "2.4.5"
 val springCloudDepVer = "Hoxton.SR10"
 
 ext["commonsIoVer"] = "2.10.0"
-ext["kotlinVer"] = "1.4.32"
+ext["kotlinVer"] = "1.5.31"
 
 allprojects {
     group = "xyz.starestarrysky.library"

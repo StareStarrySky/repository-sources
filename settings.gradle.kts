@@ -12,6 +12,7 @@ include(
     "bookstore-base",
     "bookstore-deploy",
     "bookstore-jpa",
-    "bookstore-kotlin",
+    "bookstore-kotlin-jdk7",
+    "bookstore-kotlin-jdk8",
     "bookstore-util"
 )

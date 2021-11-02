@@ -10,7 +10,7 @@ plugins {
 }
 
 base {
-    archivesBaseName = "bookstore-kotlin"
+    archivesBaseName = "bookstore-kotlin-jdk7"
 }
 
 configurations {
@@ -21,7 +21,7 @@ configurations {
 }
 
 dependencies {
-    api(kotlin("stdlib-jdk8", rootProject.ext["kotlinVer"].toString()))
+    api(kotlin("stdlib-jdk7", rootProject.ext["kotlinVer"].toString()))
     testApi(kotlin("test", rootProject.ext["kotlinVer"].toString()))
 }
 
