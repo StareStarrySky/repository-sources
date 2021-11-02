@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.starestarrysky.extension.GitHubExtension
+import com.github.starestarrysky.tasks.SiteTask
 
 buildscript {
     repositories {
@@ -30,14 +32,18 @@ val springCloudDepVer = "Hoxton.SR10"
 ext["commonsIoVer"] = "2.10.0"
 ext["kotlinVer"] = "1.5.31"
 
+apply(plugin = "com.github.starestarrysky.site-gradle-plugin")
+
 allprojects {
     group = "xyz.starestarrysky.library"
     version = revision
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "maven-publish")
 
     repositories {
         mavenLocal()
+        maven("https://plugins.gradle.org/m2/")
         mavenCentral()
     }
 
@@ -74,4 +80,21 @@ allprojects {
 tasks.named<Wrapper>("wrapper") {
     gradleVersion = gradleVer
     distributionType = Wrapper.DistributionType.BIN
+}
+
+configure<GitHubExtension> {
+    credentials.oauthToken = ""
+}
+
+tasks.register<SiteTask>("site") {
+    subprojects.forEach { project ->
+        dependsOn(":" + project.name + ":publishMavenPublicationToProjectDeployRepository")
+    }
+
+    repositoryName.set("repository")
+    repositoryOwner.set("StareStarrySky")
+    branch.set("refs/heads/v${rootProject.version}")
+    message.set("Repository for ${rootProject.version}.")
+    outputDirectory.set(file("${rootProject.buildDir}/deploy"))
+    includes.add("**/*")
 }

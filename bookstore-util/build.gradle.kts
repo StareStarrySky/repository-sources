@@ -1,12 +1,7 @@
-import com.github.starestarrysky.extension.GitHubExtension
-import com.github.starestarrysky.tasks.SiteTask
 import org.jetbrains.dokka.gradle.DokkaTask
 
 plugins {
-    kotlin("jvm")
-    `maven-publish`
     id("org.jetbrains.dokka")
-    id("com.github.starestarrysky.site-gradle-plugin")
 }
 
 base {
@@ -40,7 +35,7 @@ tasks {
         repositories {
             maven {
                 name = "projectDeploy"
-                url = uri("${project.buildDir}/deploy")
+                url = uri("${rootProject.buildDir}/deploy")
             }
         }
         publications {
@@ -52,20 +47,4 @@ tasks {
             }
         }
     }
-}
-
-configure<GitHubExtension> {
-    credentials {
-        oauthToken = ""
-    }
-}
-
-val site by tasks.creating(SiteTask::class) {
-    dependsOn("publishMavenPublicationToProjectDeployRepository")
-    repositoryName.set("repository")
-    repositoryOwner.set("StareStarrySky")
-    branch.set("refs/heads/master")
-    message.set("Repository for ${rootProject.version}.")
-    outputDirectory.set(file("$buildDir/deploy"))
-    includes.add("**/*")
 }
