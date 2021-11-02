@@ -32,7 +32,7 @@ tasks {
                         dependency.appendNode("artifactId", it.name)
                         dependency.appendNode("version", it.version)
 //                        dependency.appendNode("type", "jar")
-                        dependency.appendNode("scope", "runtime")
+//                        dependency.appendNode("scope", "runtime")
                     }
                     configurations.testApi.get().allDependencies.forEach {
                         val dependency = dependencies.appendNode("dependency")
