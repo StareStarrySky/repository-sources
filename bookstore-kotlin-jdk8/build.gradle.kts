@@ -81,6 +81,7 @@ tasks {
         <pluginOptions>
             <option>all-open:annotation=javax.persistence.*</option>
         </pluginOptions>
+        <jvmTarget>1.8</jvmTarget>
     </configuration>
     <dependencies>
         <dependency>
