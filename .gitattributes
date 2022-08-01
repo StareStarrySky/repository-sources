@@ -10,6 +10,8 @@
 *.md            text
 *.kt            text
 *.kts           text
+*.yml           text
+*.bak           text
 
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf

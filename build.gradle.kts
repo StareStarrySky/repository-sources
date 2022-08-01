@@ -9,28 +9,29 @@ buildscript {
         mavenCentral()
     }
 
-    val kotlinVer = "1.5.31"
+    val kotlinVersion = project.property("kotlin.version") as String
+    val dokkaVersion = project.property("kotlin.dokka.version") as String
+    val siteVersion = project.property("kotlin.site.version") as String
+
+    val gradleSpringVersion = project.property("gradle.spring.dependency.version") as String
 
     dependencies {
-        classpath(kotlin("allopen", kotlinVer))
-        classpath(kotlin("noarg", kotlinVer))
-        classpath(kotlin("gradle-plugin", kotlinVer))
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
-        classpath("com.github.starestarrysky:site-gradle-plugin:1.0.2")
+        classpath(kotlin("allopen", kotlinVersion))
+        classpath(kotlin("noarg", kotlinVersion))
+        classpath(kotlin("gradle-plugin", kotlinVersion))
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
+        classpath("com.github.starestarrysky:site-gradle-plugin:${siteVersion}")
 
-        classpath("io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:${gradleSpringVersion}")
     }
 }
 
-val revision = "1.0.0"
-val javaVer = "15"
-val gradleVer = "7.0"
+val revision = project.property("revision") as String
+val javaVer = project.property("java.version") as String
+val gradleVer = project.property("gradle.version") as String
 
-val springBootDepVer = "2.4.5"
-val springCloudDepVer = "Hoxton.SR10"
-
-ext["commonsIoVer"] = "2.10.0"
-ext["kotlinVer"] = "1.5.31"
+val springBootDepVer = project.property("spring.boot.dependencies.version") as String
+val springCloudDepVer = project.property("spring.cloud.dependencies.version") as String
 
 apply(plugin = "com.github.starestarrysky.site-gradle-plugin")
 

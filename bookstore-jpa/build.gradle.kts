@@ -4,10 +4,6 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-base {
-    archivesBaseName = "bookstore-jpa"
-}
-
 dependencies {
     api("javax.persistence:javax.persistence-api")
 }

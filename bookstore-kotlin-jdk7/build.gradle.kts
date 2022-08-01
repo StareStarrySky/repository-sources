@@ -1,7 +1,3 @@
-base {
-    archivesBaseName = "bookstore-kotlin-jdk7"
-}
-
 configurations {
     "implementation" {
         exclude(group = "org.springframework.boot", module = "spring-boot-dependencies")
@@ -9,9 +5,11 @@ configurations {
     }
 }
 
+val kotlinVersion = project.property("kotlin.version") as String
+
 dependencies {
-    api(kotlin("stdlib-jdk7", rootProject.ext["kotlinVer"].toString()))
-    testApi(kotlin("test", rootProject.ext["kotlinVer"].toString()))
+    api(kotlin("stdlib-jdk7", kotlinVersion))
+    testApi(kotlin("test", kotlinVersion))
 }
 
 tasks {

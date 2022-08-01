@@ -1,7 +1,3 @@
-base {
-    archivesBaseName = "bookstore-deploy"
-}
-
 configurations {
     "implementation" {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")

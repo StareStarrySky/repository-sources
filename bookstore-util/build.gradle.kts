@@ -4,14 +4,14 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-base {
-    archivesBaseName = "bookstore-util"
-}
+val commonsIoVersion = project.property("commons-io.version") as String
+val freemarkerVersion = project.property("freemarker.version") as String
 
 dependencies {
     api("org.springframework:spring-beans")
     api("org.apache.commons:commons-lang3")
-    api("commons-io:commons-io:${rootProject.ext["commonsIoVer"]}")
+    api("commons-io:commons-io:${commonsIoVersion}")
+    api("org.freemarker:freemarker:${freemarkerVersion}")
 }
 
 val generateSourcesJar by tasks.creating(Jar::class) {

@@ -1,0 +1,247 @@
+package com.maikegroup.delight.ctrm.util.common;
+
+import com.aspose.cells.*;
+import com.aspose.words.*;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.layout.font.FontProvider;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
+import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+
+public class PDFUtil {
+    private static final com.aspose.cells.LoadOptions loadOptions = new com.aspose.cells.LoadOptions();
+    private static final FontProvider fontProvider = new FontProvider();
+    static {
+        try {
+            ClassPathResource licenseFile = new ClassPathResource("static/pdf/license.xml");
+            if (!licenseFile.exists()) {
+                throw new FileNotFoundException("license文件不存在");
+            }
+
+            com.aspose.cells.License license = new com.aspose.cells.License();
+            license.setLicense(licenseFile.getInputStream());
+
+            PathMatchingResourcePatternResolver pathResolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = pathResolver.getResources(PathMatchingResourcePatternResolver.CLASSPATH_URL_PREFIX + "static/font/*.*");
+            if (resources.length == 0) {
+                throw new FileNotFoundException("没找到字体文件");
+            }
+
+            IndividualFontConfigs fontConfigs = new IndividualFontConfigs();
+            com.aspose.cells.FontSourceBase[] fontSourceBases = new com.aspose.cells.FontSourceBase[resources.length];
+            for (int i = 0; i < resources.length; i++) {
+                com.aspose.cells.MemoryFontSource memoryFontSource = new com.aspose.cells.MemoryFontSource(IOUtils.toByteArray(resources[i].getInputStream()));
+                fontSourceBases[i] = memoryFontSource;
+
+                fontProvider.addFont(IOUtils.toByteArray(resources[i].getInputStream()));
+            }
+            fontConfigs.setFontSources(fontSourceBases);
+            loadOptions.setFontConfigs(fontConfigs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] word2Pdf(byte[] source) {
+        // 有代码可以提取出来
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            ClassPathResource licenseFile = new ClassPathResource("static/pdf/license.xml");
+            if (!licenseFile.exists()) {
+                throw new FileNotFoundException("license文件不存在");
+            }
+
+            PathMatchingResourcePatternResolver pathResolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = pathResolver.getResources(PathMatchingResourcePatternResolver.CLASSPATH_URL_PREFIX + "static/font/*.*");
+            if (resources.length == 0) {
+                throw new FileNotFoundException("没找到字体文件");
+            }
+
+            com.aspose.words.License license = new com.aspose.words.License();
+            license.setLicense(licenseFile.getInputStream());
+
+            is = new ByteArrayInputStream(source);
+            os = new ByteArrayOutputStream();
+
+            Document document = new Document(is);
+
+            com.aspose.words.FontSettings fontSettings = new com.aspose.words.FontSettings();
+            com.aspose.words.FontSourceBase[] fontSourceBases = new com.aspose.words.FontSourceBase[resources.length];
+            for (int i = 0; i < resources.length; i++) {
+                com.aspose.words.MemoryFontSource memoryFontSource = new com.aspose.words.MemoryFontSource(IOUtils.toByteArray(resources[i].getInputStream()));
+                fontSourceBases[i] = memoryFontSource;
+            }
+            fontSettings.setFontsSources(fontSourceBases);
+            document.setFontSettings(fontSettings);
+
+            insertWatermark2Word(document);
+
+            document.save(os, com.aspose.words.SaveFormat.PDF);
+
+            byte[] target = os.toByteArray();
+            os.close();
+            is.close();
+            return target;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("word转pdf失败");
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static byte[] excel2Pdf(byte[] source) {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            is = new ByteArrayInputStream(source);
+            os = new ByteArrayOutputStream();
+
+            Workbook workbook = new Workbook(is, loadOptions);
+
+//            insertWatermark2Excel(workbook);
+
+            workbook.save(os, com.aspose.cells.SaveFormat.PDF);
+
+            byte[] target = os.toByteArray();
+            os.close();
+            is.close();
+            return target;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("excel转pdf失败");
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void insertWatermark2Word(Document document) {
+        try {
+            com.aspose.words.Shape watermark = new com.aspose.words.Shape(document, ShapeType.TEXT_PLAIN_TEXT);
+            watermark.setName("watermark");
+            watermark.getTextPath().setText("非原始文件，仅作预览！");
+            watermark.getTextPath().setFontFamily("FangSong");
+            watermark.setWidth(700.0);
+            watermark.setHeight(60.0);
+            watermark.setRotation(-50.0);
+            watermark.getFill().setColor(new Color(128, 128, 128, 128));
+            watermark.setStrokeColor(new Color(128, 128, 128, 128));
+            watermark.setRelativeHorizontalPosition(RelativeHorizontalPosition.PAGE);
+            watermark.setRelativeVerticalPosition(RelativeVerticalPosition.PAGE);
+            watermark.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            watermark.setVerticalAlignment(VerticalAlignment.CENTER);
+            watermark.setWrapType(WrapType.NONE);
+
+            Paragraph wmParagraph = new Paragraph(document);
+            wmParagraph.appendChild(watermark);
+
+            for (Section section : document.getSections()) {
+                HeaderFooter primary = section.getHeadersFooters().getByHeaderFooterType(HeaderFooterType.HEADER_PRIMARY);
+                if (primary != null) {
+                    primary.appendChild(wmParagraph.deepClone(true));
+                } else {
+                    primary = new HeaderFooter(section.getDocument(), HeaderFooterType.HEADER_PRIMARY);
+                    primary.appendChild(wmParagraph.deepClone(true));
+                    section.getHeadersFooters().add(primary);
+                }
+                HeaderFooter first = section.getHeadersFooters().getByHeaderFooterType(HeaderFooterType.HEADER_FIRST);
+                if (first != null) {
+                    first.appendChild(wmParagraph.deepClone(true));
+                } else {
+                    first = new HeaderFooter(section.getDocument(), HeaderFooterType.HEADER_FIRST);
+                    first.appendChild(wmParagraph.deepClone(true));
+                    section.getHeadersFooters().add(first);
+                }
+                HeaderFooter even = section.getHeadersFooters().getByHeaderFooterType(HeaderFooterType.HEADER_EVEN);
+                if (even != null) {
+                    even.appendChild(wmParagraph.deepClone(true));
+                } else {
+                    even = new HeaderFooter(section.getDocument(), HeaderFooterType.HEADER_EVEN);
+                    even.appendChild(wmParagraph.deepClone(true));
+                    section.getHeadersFooters().add(even);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("水印添加失败");
+        }
+    }
+
+    public static void insertWatermark2Excel(Workbook workbook) {
+        Iterator worksheets = workbook.getWorksheets().iterator();
+        for (Iterator it = worksheets; it.hasNext(); ) {
+            Worksheet worksheet = (Worksheet) it.next();
+            ShapeCollection shapes = worksheet.getShapes();
+            com.aspose.cells.Shape shape = shapes.addTextEffect(MsoPresetTextEffect.TEXT_EFFECT_1,
+                    "非原始文件，仅作预览！", "FangSong", 50, false, false
+                    , 0, 0, 0, 0, 50, 500);
+
+            MsoFillFormat wordArtFormat = shape.getFillFormat();
+            wordArtFormat.setForeColor(com.aspose.cells.Color.fromArgb(128, 128, 128, 128));
+            wordArtFormat.setTransparency(0.5);
+
+            MsoLineFormat lineFormat1 = shape.getLineFormat();
+            lineFormat1.setVisible(false);
+        }
+    }
+
+    public static byte[] html2Pdf(byte[] source) {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            is = new ByteArrayInputStream(source);
+            os = new ByteArrayOutputStream();
+
+            ConverterProperties properties = new ConverterProperties();
+
+            FontProvider font = new FontProvider(fontProvider.getFontSet());
+            properties.setFontProvider(font);
+
+            HtmlConverter.convertToPdf(is, os, properties);
+
+            return os.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("html转Pdf失败");
+        } finally {
+            IOUtils.closeQuietly(os);
+            IOUtils.closeQuietly(is);
+        }
+    }
+}

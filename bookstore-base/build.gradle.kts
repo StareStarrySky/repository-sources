@@ -4,10 +4,6 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-base {
-    archivesBaseName = "bookstore-base"
-}
-
 dependencies {
     api("org.springframework:spring-beans")
     api("org.springframework:spring-context")
