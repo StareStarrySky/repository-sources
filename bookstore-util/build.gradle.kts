@@ -6,12 +6,16 @@ plugins {
 
 val commonsIoVersion = project.property("commons-io.version") as String
 val freemarkerVersion = project.property("freemarker.version") as String
+val jacksonVersion = project.property("jackson.version") as String
 
 dependencies {
     api("org.springframework:spring-beans")
     api("org.apache.commons:commons-lang3")
     api("commons-io:commons-io:${commonsIoVersion}")
     api("org.freemarker:freemarker:${freemarkerVersion}")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
 }
 
 val generateSourcesJar by tasks.creating(Jar::class) {

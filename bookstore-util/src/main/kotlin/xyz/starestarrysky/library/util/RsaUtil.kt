@@ -1,4 +1,4 @@
 package xyz.starestarrysky.library.util
 
-class RSAUtil {
+class RsaUtil {
 }

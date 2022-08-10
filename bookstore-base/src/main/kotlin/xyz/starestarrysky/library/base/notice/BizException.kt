@@ -2,7 +2,7 @@ package xyz.starestarrysky.library.base.notice
 
 class BizException : RuntimeException {
     companion object {
-        private const val serialVersionUID = 0L
+        private const val serialVersionUID = -5926269769235712823L
 
         const val DEFAULT_ERROR_HTTP_STATUS = 500
         const val DEFAULT_ERROR_CODE = "9999"

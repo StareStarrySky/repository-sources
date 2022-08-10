@@ -27,7 +27,7 @@ buildscript {
 }
 
 val revision = project.property("revision") as String
-val javaVer = project.property("java.version") as String
+val jvmTar = project.property("jvm.target") as String
 val gradleVer = project.property("gradle.version") as String
 
 val springBootDepVer = project.property("spring.boot.dependencies.version") as String
@@ -73,7 +73,7 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = javaVer
+            jvmTarget = jvmTar
         }
     }
 }
