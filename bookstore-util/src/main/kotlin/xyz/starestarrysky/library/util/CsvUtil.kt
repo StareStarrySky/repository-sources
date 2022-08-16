@@ -1,6 +1,5 @@
 package xyz.starestarrysky.library.util
 
-import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.dataformat.csv.CsvSchema
 import java.io.IOException
@@ -15,18 +14,18 @@ class CsvUtil {
 
         fun <T> csv2List(src: ByteArray, t: Class<T>, withHeader: Boolean): List<T> {
             return try {
-                val objectReader = CSV_MAPPER.readerFor(t)
+                var objectReader = CSV_MAPPER.readerFor(t)
 
                 if (withHeader) {
-                    objectReader.with(CsvSchema.emptySchema().withHeader())
+                    objectReader = objectReader.with(CsvSchema.emptySchema().withHeader())
                 }
 
-                val it: MappingIterator<T> = objectReader.readValues(src)
+                val it = objectReader.readValues<T>(src)
 
                 it.readAll()
             } catch (e: IOException) {
                 e.printStackTrace()
-                ArrayList(0)
+                arrayListOf()
             }
         }
     }
