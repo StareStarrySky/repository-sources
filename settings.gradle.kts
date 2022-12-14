@@ -5,5 +5,6 @@ include(
     "bookstore-jpa",
     "bookstore-kotlin-jdk7",
     "bookstore-kotlin-jdk8",
+    "bookstore-security",
     "bookstore-util"
 )
