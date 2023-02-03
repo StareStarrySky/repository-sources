@@ -26,19 +26,19 @@ buildscript {
     }
 }
 
-val revision = project.property("revision") as String
-val jvmTar = project.property("jvm.target") as String
-val gradleVer = project.property("gradle.version") as String
-
-val springBootDepVer = project.property("spring.boot.dependencies.version") as String
-val springCloudDepVer = project.property("spring.cloud.dependencies.version") as String
-
 apply(plugin = "com.github.starestarrysky.site-gradle-plugin")
 
 allprojects {
+    val revision = project.property("revision") as String
+    val javaVersion = project.property("java.version") as String
+
+    val springBootDepVer = project.property("spring.boot.dependencies.version") as String
+    val springCloudDepVer = project.property("spring.cloud.dependencies.version") as String
+
     group = "xyz.starestarrysky.library"
     version = revision
 
+    apply(plugin = "java-library")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "maven-publish")
 
@@ -61,6 +61,11 @@ allprojects {
         implementation(platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudDepVer}"))
     }
 
+    configure<JavaPluginExtension> {
+        sourceCompatibility = JavaVersion.toVersion(javaVersion)
+        targetCompatibility = JavaVersion.toVersion(javaVersion)
+    }
+
     configure<SourceSetContainer> {
         named("main") {
             java.srcDir("src/main/kotlin")
@@ -73,13 +78,13 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = jvmTar
+            jvmTarget = javaVersion
         }
     }
 }
 
 tasks.named<Wrapper>("wrapper") {
-    gradleVersion = gradleVer
+    gradleVersion = project.property("gradle.version") as String
     distributionType = Wrapper.DistributionType.BIN
 }
 
